@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         val etTask :EditText = findViewById(R.id.inputTask)
         val button: FloatingActionButton = findViewById(R.id.btaddCat)
         val button2: FloatingActionButton = findViewById(R.id.btaddCat2)
-        var checkBoxes = mapOf<String,  MutableList<CheckBox> >()
+        var checkBoxes = mutableMapOf<String,  MutableList<CheckBox> >()
         var tasks = mutableListOf<String>()
         val layout = findViewById<LinearLayout>(R.id.linearScroll)
 
@@ -67,14 +67,25 @@ class MainActivity : AppCompatActivity() {
                 ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,options)
             spinnerVal.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
                 override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+
                     flag = options[p2]
                     if(spinnerVal.selectedItem.toString()== "All Categories"){
                         layout.removeAllViews();
                         for (k in checkBoxes.keys){
+                            println(k)
+                            println("*****************************")
                             for(i in checkBoxes[k]!!){
                                 layout.addView(i)
                             }
                         }
+
+                    }
+                    else{
+                        layout.removeAllViews();
+                        for(i in checkBoxes[spinnerVal.selectedItem.toString()]!!){
+                            layout.addView(i)
+                        }
+
 
                     }
                 }
@@ -109,8 +120,16 @@ class MainActivity : AppCompatActivity() {
 
             checkBox.text =category+ ": "+task
             //add checkboxes to a map to later categorize them
-            tasks.plus(category + ": " + task)
-            checkBoxes[category]?.plus(checkBox)
+            tasks.add(category + ": " + task)
+            if (checkBoxes[category] == null){
+                checkBoxes[category] = mutableListOf()
+
+            }
+            checkBoxes[category]?.add(checkBox)
+
+            println(checkBox)
+           println(checkBoxes[category])
+
             var chosen : String = spinnerVal.selectedItem.toString()
             if(chosen == category || chosen =="All Categories")
                 layout.addView(checkBox)
@@ -138,34 +157,47 @@ class MainActivity : AppCompatActivity() {
             etTask.text = null
 
         }
-        spinnerVal.onItemSelectedListener= object : AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                    if(spinnerVal.selectedItem.toString()== "All Categories"){
-                        layout.removeAllViews();
-                        for ((k,v) in checkBoxes){
-                            for(i in checkBoxes[k]!!){
-                                layout.addView(i)
-                            }
-                        }
 
-                    }
-                    else{
-                        layout.removeAllViews();
-                        for(i in checkBoxes[spinnerVal.selectedItem.toString()]!!){
-                            layout.addView(i)
-                        }
+//        val checkBox = CheckBox(this)
+//        spinnerVal.onItemSelectedListener= object : AdapterView.OnItemSelectedListener{
+//            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+//                flag = options[p2]
+//                println(spinnerVal.selectedItem.toString())
+//                println("*****************************")
+//
+//                if(spinnerVal.selectedItem.toString()== "All Categories"){
+//                    layout.removeAllViews();
+////                    var checkBoxes = mapOf<String,  MutableList<CheckBox> >()
+////
+////                    checkBox.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, 100)
+////                    checkBox.text ="blah blah"
+////                    checkBoxes["category"]?.plus(checkBox)
+//                    for (k in checkBoxes.keys){
+//                        println(k)
+//                        println("*****************************")
+//                        for(i in checkBoxes[k]!!){
+//                            layout.addView(i)
+//                        }
+//                    }
+//
+//                }
+//                else{
+//                    layout.removeAllViews();
+//                    for(i in checkBoxes[spinnerVal.selectedItem.toString()]!!){
+//                        layout.addView(i)
+//                    }
+//
+//
+//                }
+//
+//
+//            }
 
+//            override fun onNothingSelected(p0: AdapterView<*>?) {
+//                TODO("Not yet implemented")
+//            }
 
-                    }
-
-
-            }
-
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-                TODO("Not yet implemented")
-            }
-
-        }
+//        }
 
 
 
